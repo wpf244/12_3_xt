@@ -163,7 +163,7 @@
 
                     <select name="express"><option value="0">请选择快递</option>
                       {volist name="express" id="v"}
-                      <option value="{$v.express_name}" >{$v.express_name}</option>
+                      <option value="{$v.id}" >{$v.express_name}</option>
                       {/volist}
                     </select>
                     <input type="text" placeholder="请输入快递单号"   name="number"  style="color:#00F" class="submitinputs">
@@ -202,7 +202,7 @@
 
                     <select name="express" id="express_ad" disabled="disabled" ><option value="0">请选择快递</option>
                       {volist name="express" id="v"}
-                      <option value="{$v.express_name}" {if condition="$re.express eq $v['express_name']"} selected {/if} >{$v.express_name}</option>
+                      <option value="{$v.id}" {if condition="$re.express eq $v['express_name']"} selected {/if} >{$v.express_name}</option>
                       {/volist}
                     </select>
                     <input type="text" placeholder="请输入快递单号" readonly value="{$re.number}" id="number"  name="number"  style="color:#00F" class="submitinputs">
@@ -223,6 +223,8 @@
                 </tr>
 
               </table>
+
+
 
               {/if}
 

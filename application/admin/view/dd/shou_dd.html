@@ -127,7 +127,9 @@
                     <a class="btn btn-xs btn-info" href="{:url('detail',array('id'=>$v['did']))}">
                       订单详情
                     </a>
-               
+                    <a class="btn btn-xs btn-success" href="{:url('express_detail',array('did'=>$v['did']))}">
+                     查看物流
+                    </a>
                   </td>
                 </tr>
     
@@ -152,6 +154,7 @@
   <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 </a>
 </div><!-- /.main-container -->
+
 
 <script>
   jQuery(function($) {

@@ -147,6 +147,12 @@ class Pay extends BaseHome
 
                     $res = explode(",",$pay);
 
+                    $arr['uid']=$re['uid'];
+                    $arr['did']=$re['did'];
+                    $arr['money']=$re['zprice'];
+                    $arr['content']="订单消费";
+                    $arr['time']=time();
+
                     Db::startTrans();
                     try{
 
@@ -169,6 +175,8 @@ class Pay extends BaseHome
 
                             db("goods")->where("id=$gid")->setDec("kc",$num);
 
+
+
                         }
 
                         //修改用户账户余额
@@ -177,7 +185,8 @@ class Pay extends BaseHome
                         //修改用户消费金额
 
                         \db("user")->where("uid",$uid)->setInc("consume_money",$goods_money);
-
+                        //添加消费记录
+                        \db("consume_log")->insert($arr);
 
                         echo '1';
 

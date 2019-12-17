@@ -149,69 +149,45 @@ class Users extends BaseUser
 
         $this->assign("res",$res);
 
-        $number="766478435823325072";
 
-        $numcode=$this->aaa();
-
-        var_dump($numcode);
         
         return $this->fetch();
      }
-
-     //即时查询
-    public function aaa()
+    /**
+     * 物流详情
+     *
+     */
+    public function express_detail()
     {
-        $post_data = array();
-        $post_data["customer"] = '4450066D404F9E6632FEDDF24F023A55';
-        $key= 'JvKEHsiy5109' ;
-        $post_data["param"] = '{"com":"shunfeng","num":"291646130143"}';
 
-        $url='http://poll.kuaidi100.com/poll/query.do';
-        $post_data["sign"] = md5($post_data["param"].$key.$post_data["customer"]);
-        $post_data["sign"] = strtoupper($post_data["sign"]);
-        $o="";
-        foreach ($post_data as $k=>$v)
-        {
-            $o.= "$k=".urlencode($v)."&";		//默认UTF-8编码格式
+        $did=input("did");
+
+        $dd=\db("car_dd")->where("did",$did)->find();
+
+        $this->assign("dd",$dd);
+
+        $code=$dd['express_code'];
+
+        $number=$dd['number'];
+
+        $re=find_express($code,$number);
+
+//        var_dump($re);
+
+        if($re['message'] == 'ok'){
+            $data=$re['data'];
+
+        }else{
+
+            $data[0]['time']=date("Y-m-d H:i:s");
+            $data[0]['context']="暂无物流信息";
+
         }
-        $post_data=substr($o,0,-1);
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        $result = curl_exec($ch);
-        $data = str_replace("\&quot;",'"',$result );
-        $data = json_decode($data,true);
+
+        $this->assign("data",$data);
+
+        return $this->fetch();
     }
-
-     //智能查询
-    public function finds()
-    {
-        $url="http://www.kuaidi100.com/autonumber/auto?num=291646130143&key=JvKEHsiy5109";
-
-        $result=$this->curl_get($url);
-
-        return $result;
-    }
-
-    public function curl_get($url)
-    {
-
-        $info = curl_init();
-        curl_setopt($info,CURLOPT_RETURNTRANSFER,true);
-        curl_setopt($info,CURLOPT_HEADER,0);
-        curl_setopt($info,CURLOPT_NOBODY,0);
-        curl_setopt($info,CURLOPT_SSL_VERIFYPEER,false);
-        curl_setopt($info,CURLOPT_SSL_VERIFYPEER,false);
-        curl_setopt($info,CURLOPT_SSL_VERIFYHOST,false);
-        curl_setopt($info,CURLOPT_URL,$url);
-        $output = curl_exec($info);
-        curl_close($info);
-        return $output;
-    }
-
-
 
      /**
      * 取消订单

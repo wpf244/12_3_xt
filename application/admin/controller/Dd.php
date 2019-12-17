@@ -208,8 +208,71 @@ class Dd extends BaseAdmin
             $arr[]=db("car_dd")->alias('a')->field("a.*,b.kc")->where("a.code='$v'")->join("goods b","a.gid = b.id")->find();
         }
         $this->assign("list",$arr);
+
+
+
         return $this->fetch();
     }
+    public function express_detail()
+    {
+
+        $did=input("did");
+
+        $dd=\db("car_dd")->where("did",$did)->find();
+
+        $this->assign("dd",$dd);
+
+        $code=$dd['express_code'];
+
+        $number=$dd['number'];
+
+        $re=find_express($code,$number);
+
+//        var_dump($re);
+
+        if($re['message'] == 'ok'){
+            $data=$re['data'];
+
+        }else{
+
+            $data[0]['time']=date("Y-m-d H:i:s");
+            $data[0]['context']="暂无物流信息";
+
+        }
+
+
+//        var_dump($data);
+//        $last=array_pop($data);
+//
+//        $first=array_shift($data);
+//
+//        $info=$this->PeriodTime($last,$first,1);
+
+//        $data=end($data);
+
+//        var_dump($data);
+
+        $arr=[];
+
+        foreach ($data as $k => $v){
+            $arr[]=$k;
+
+
+        }
+
+        $keys=max($arr)+1;
+
+        $this->assign("keys",$keys);
+
+        $this->assign("data",$data);
+
+
+        return $this->fetch();
+    }
+
+
+
+
     public function delete()
     {
         $id=\input('id');
@@ -229,10 +292,40 @@ class Dd extends BaseAdmin
         $id=\input('id');
         $re=db("car_dd")->where("did=$id")->find();
         if($re){
-            db("car_dd")->where("did=$id")->setField("status",2);
+
+            $data['fu_time']=time();
+            $data['status']=2;
+
+
             $pay=explode(",",$re['pay']);
+
+
           
-            db("car_dd")->where("code","in",$pay)->setField("status",2);
+
+
+            $arr['uid']=$re['uid'];
+            $arr['did']=$re['did'];
+            $arr['money']=$re['zprice'];
+            $arr['content']="订单消费";
+            $arr['time']=time();
+
+            // 启动事务
+            Db::startTrans();
+            try{
+                db("car_dd")->where("did=$id")->update($data);
+
+                db("car_dd")->where("code","in",$pay)->update($data);
+
+                \db("consume_log")->insert($arr);
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
+
+
+//            var_dump($res);exit();
              
             $this->redirect("dai_dd");
         }else{
@@ -1712,6 +1805,7 @@ class Dd extends BaseAdmin
             $id=input("id");
             if($id){
                 $data['express_name']=input("name");
+                $data['express_code']=input("code");
                 $res=db("express")->where("id",$id)->update($data);
                 if($res){
                     $this->success("修改成功！",url('Dd/express'));
@@ -1720,6 +1814,7 @@ class Dd extends BaseAdmin
                 }
             }else{
                 $data['express_name']=input("name");
+                $data['express_code']=input("code");
                 $re=db("express")->insert($data);
                 if($re){
                     $this->success("添加成功！",url('Dd/express'));
@@ -1809,7 +1904,13 @@ class Dd extends BaseAdmin
     {
         $did=input("did");
 
-        $data['express']=input("express");
+        $express=input("express");
+
+        $exp=\db("express")->where("id",$express)->find();
+
+        $data['express']=$exp['express_name'];
+
+        $data['express_code']=$exp['express_code'];
 
         $data['number']=input("number");
 
@@ -1859,7 +1960,13 @@ class Dd extends BaseAdmin
     {
         $did = input("did");
 
-        $data['express'] = input("express");
+        $express=input("express");
+
+        $exp=\db("express")->where("id",$express)->find();
+
+        $data['express']=$exp['express_name'];
+
+        $data['express_code']=$exp['express_code'];
 
         $data['number'] = input("number");
 
