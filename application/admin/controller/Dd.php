@@ -300,23 +300,31 @@ class Dd extends BaseAdmin
             $pay=explode(",",$re['pay']);
 
 
-          
-
-
-            $arr['uid']=$re['uid'];
-            $arr['did']=$re['did'];
-            $arr['money']=$re['zprice'];
-            $arr['content']="订单消费";
-            $arr['time']=time();
-
             // 启动事务
             Db::startTrans();
             try{
                 db("car_dd")->where("did=$id")->update($data);
 
-                db("car_dd")->where("code","in",$pay)->update($data);
+                foreach($pay as $v){
+                    $dd = db("car_dd")->where("code",$v)->find();
+                    $uid = $dd['uid'];
+                    $gid = $dd['gid'];
+                    $did = $dd['did'];
+                    $num = $dd['num'];
+                    $re_d = db("car_dd")->where("did=$did")->update($data);
 
-                \db("consume_log")->insert($arr);
+                    //增加销量
+                    db("goods")->where("id=$gid")->setInc("sales",$num);
+
+                    //减少库存
+
+                    db("goods")->where("id=$gid")->setDec("kc",$num);
+
+
+
+                }
+
+
                 // 提交事务
                 Db::commit();
             } catch (\Exception $e) {
@@ -1862,17 +1870,44 @@ class Dd extends BaseAdmin
 
         $data['fare']=$fare;
 
+        $data['time']=time();
+
+        $arr['uid']=$re['uid'];
+
+        $arr['did']=$did;
+
+        $arr['money']=$fare;
+
+        $arr['content']="运费消费";
+
+        $arr['time']=time();
+
+        $arr['status']=2;
+
+        $user=db("user")->where("uid",$re['uid'])->find();
+
+        $user_money=$user['money'];
+
             // 启动事务
         Db::startTrans();
         try{
 
-            $express_dd=\db("express_dd")->where(["uid"=>$re['uid'],"did"=>$did])->find();
+                if($user_money >= $fare){
+                    $data['status']=1;
 
-            if($express_dd){
-                \db("express_dd")->where("id",$express_dd['id'])->setField("fare",$fare);
-            }else{
+                    //增加消费日志
+                    \db("consume_log")->insert($arr);
+
+                    //修改用户余额
+                    \db("user")->where("uid",$re['uid'])->setDec("money",$fare);
+
+                    //修改用户消费余额
+                    \db("user")->where("uid",$re['uid'])->setInc("consume_money",$fare);
+
+                }
+                //生产运费订单
                 db("express_dd")->insert($data);
-            }
+
 
 
             db("car_dd")->where("did",$did)->setField("fare",$fare);
@@ -1889,7 +1924,6 @@ class Dd extends BaseAdmin
             Db::commit();
         } catch (\Exception $e) {
 
-
             // 回滚事务
             Db::rollback();
 
@@ -1899,6 +1933,97 @@ class Dd extends BaseAdmin
 
 
     }
+    //修改运费
+    public function fares()
+    {
+        $did=input("did");
+
+        $fare=input("fare");
+
+        $re=db("car_dd")->where("did",$did)->find();
+
+        //查询运费订单
+        $express_dd=\db("express_dd")->where(["uid"=>$re['uid'],"did"=>$did])->find();
+
+        //查询用户信息
+
+        $user=\db("user")->where("uid",$re['uid'])->find();
+
+        $arr['uid']=$re['uid'];
+
+        $arr['did']=$did;
+
+        $arr['money']=$fare;
+
+        $arr['content']="运费消费";
+
+        $arr['time']=time();
+
+        $arr['status']=2;
+
+        $money=$user['money'];
+
+        if($express_dd['status'] == 0){
+
+            // 启动事务
+            Db::startTrans();
+            try{
+
+                if($money >= $fare){
+                    $data['status']=1;
+
+                    //增加消费日志
+                    \db("consume_log")->insert($arr);
+
+                    //修改用户余额
+                    \db("user")->where("uid",$re['uid'])->setDec("money",$fare);
+
+                    //修改用户消费余额
+                    \db("user")->where("uid",$re['uid'])->setInc("consume_money",$fare);
+
+
+                }else{
+                    $data['status']=0;
+                }
+                $data['fare']=$fare;
+                //生产运费订单
+                db("express_dd")->where("id",$express_dd['id'])->update($data);
+
+
+
+                db("car_dd")->where("did",$did)->setField("fare",$fare);
+
+                $res = explode(",",$re['pay']);
+
+                foreach ($res as $v){
+                    db("car_dd")->where("code",$v)->setField("fare",$fare);
+                }
+
+                echo '1';
+
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $e) {
+
+                // 回滚事务
+                Db::rollback();
+
+                echo '2';
+            }
+
+
+        }else{
+
+
+            echo  '3';
+        }
+
+
+
+
+    }
+
+
     //发货
     public function to_express()
     {
@@ -1950,9 +2075,6 @@ class Dd extends BaseAdmin
         }else{
             echo '0';
         }
-
-
-
 
     }
 

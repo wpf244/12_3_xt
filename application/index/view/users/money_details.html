@@ -21,8 +21,8 @@
 	</div>
 
 	<div class="order_menu">
-			<a href="{:url('Users/money_detail')}" class="order_single active">充值明细</a>
-			<a href="{:url('Users/money_details')}" class="order_single">消费明细</a>
+			<a href="{:url('Users/money_detail')}" class="order_single ">充值明细</a>
+			<a href="{:url('Users/money_details')}" class="order_single active">消费明细</a>
 
 		</div>
 
@@ -45,9 +45,10 @@
 		  <tr class="money">
 
 			  <th>金额</th>
-			  <th>类型</th>
+
 			  <th>备注</th>
 			  <th>时间</th>
+			  <th>操作</th>
 
 		  </tr>
 		  </thead>
@@ -56,9 +57,10 @@
             {volist name="res" id="v"}
          <tr class="money">
 		  <td>{$v.money}</td>
-		  <td>{if condition="$v.type eq 1"} <span style="color: #00BE67;">增加</span> {else /} <span style="color: red;">减少</span> {/if}</td>
+
 		  <td>{$v.content}</td>
 		  <td>{$v.time|date="Y-m-d H:i:s",###}</td>
+		  <td><a href="{:url('Users/dd_detail',array('did'=>$v['did']))}">查看详情</a></td>
 
 		 </tr>
 		{/volist}

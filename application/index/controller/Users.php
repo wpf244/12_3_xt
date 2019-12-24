@@ -617,4 +617,103 @@ class Users extends BaseUser
             $this->error("系统繁忙,请稍后再试");
         }
      }
+
+     /**
+      * 运费订单
+      */
+     public function express_dd()
+     {
+
+        $uid=session("userid");
+
+        $res=\db("express_dd")->alias("a")->field("a.*,b.code,b.zprice")->where(["a.uid"=>$uid,"a.status"=>0])->join("car_dd b","a.did = b.did")->order("id desc")->select();
+
+        $this->assign("res",$res);
+
+         return $this->fetch();
+     }
+     public function express_dds()
+     {
+         $uid=session("userid");
+
+         $res=\db("express_dd")->alias("a")->field("a.*,b.code,b.zprice")->where(["a.uid"=>$uid,"a.status"=>1])->join("car_dd b","a.did = b.did")->order("id desc")->select();
+
+         $this->assign("res",$res);
+
+         return $this->fetch();
+     }
+     /**
+      * 订单详情
+      */
+     public function dd_detail()
+     {
+         $did=input("did");
+
+         $dd=\db("car_dd")->where("did",$did)->find();
+
+         $this->assign("dd",$dd);
+
+         $pay=explode(",",$dd['pay']);
+
+         $res=\db("car_dd")->where("code","in",$pay)->select();
+
+         $this->assign("res",$res);
+
+         $code=$dd['express_code'];
+
+         $number=$dd['number'];
+
+         $re=find_express($code,$number);
+
+
+         if($re['message'] == 'ok'){
+             $data=$re['data'];
+
+             $arr['time']=$data[0]['time'];
+             $arr['context']=$data[0]['context'];
+
+         }else{
+
+             $arr['time']=date("Y-m-d H:i:s");
+             $arr['context']="等待揽收";
+
+         }
+
+
+
+         $this->assign("arr",$arr);
+
+         return $this->fetch();
+     }
+     /**
+      * 余额明细
+      */
+     public function money_detail()
+     {
+
+         $uid=session("userid");
+
+         $res=\db("money_log")->where("uid",$uid)->order("time desc")->select();
+
+         $this->assign("res",$res);
+
+         return $this->fetch();
+     }
+     /**
+      * 消费明细
+      */
+     public function money_details()
+     {
+
+         $uid=session("userid");
+
+         $res=\db("consume_log")->where("uid",$uid)->order("time desc")->select();
+
+         $this->assign("res",$res);
+
+         return $this->fetch();
+     }
+    
+
+
 }

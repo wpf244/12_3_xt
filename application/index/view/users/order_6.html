@@ -37,7 +37,7 @@
 			</div>
 		  {volist name="$v['list']" id="p"}	
 			<div class="order_goods">
-	<img class="mar_rt_12" src="__HOME__/img/goods_pic.png" width="90" height="90" alt="">
+	<img class="mar_rt_12" src="{$p.simage}" width="90" height="90" alt="">
 	<div class="flex_1">
 		<div class="order_wrap">
 			<div class="flex_1">
@@ -62,7 +62,7 @@
 			</div>
 			<div class="p_12 am-text-right">
 					
-					<!-- <a href="{:url('Users/assess',array('did'=>$v['did']))}" class="order_pay am-btn am-btn-xs am-round am-btn-danger">去评价</a> -->
+					 <a href="{:url('Users/dd_detail',array('did'=>$v['did']))}" class="order_cancle am-btn am-btn-xs am-round am-btn-default">订单详情</a>
 				</div>
 		</li>
 		{/volist}

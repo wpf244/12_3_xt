@@ -35,9 +35,12 @@
 		</h5>
 		<div class="flex_between">
 			<div class="col_main">￥{$re.xprice}</div>
-			<span {if condition="$collect eq 0"} class="goods_collect mar_lt_12" {else /} class="goods_collect mar_lt_12 active" {/if} ></span>
+			<span {if condition="$collect eq 0"} class="goods_collect mar_lt_12" {else /} class="goods_collect mar_lt_12 active" {/if} >
+
+			</span>
+
 		</div>
-<!--			<div style="color: #CCCCCC;text-decoration: line-through;font-size: 12px;">{$re.code}</div>-->
+			<div class="flex_between col_nine  mar_btm_6"><span></span><span>收藏</span></div>
 		<div class="flex_between col_nine  mar_btm_6">
 			<span>库存:{$re.kc}</span><span>销量:{$re.sales}</span>
 		</div>
@@ -118,7 +121,8 @@
 				<ul class="flex_normal flex_wrap ">
 					<!-- <li class="feed_item active">15g</li> -->
 					{volist name="spec" id="vs" key="ks"}
-					<li {if condition="$ks eq 1"} class="feed_item active" {else /} class="feed_item" {/if} data-id="{$vs.sid}" >{$vs.s_name}</li>
+				<li {if condition="$ks eq 1"} class="feed_item active" {else /} class="feed_item" {/if} data-id="{$vs.sid}" >{$vs.s_name}</li>
+
 					{/volist}
 				</ul>
 			</div>

@@ -59,9 +59,9 @@
 				{if condition="$v.collection eq 1"}<div style="float: left;">代收：<span class="col_main am-text-lg">￥{$v.collection_money}</span></div>{/if}
 				合计：<span class="col_main am-text-lg">￥{$v.zprice}</span>
 			</div>
-<!--			<div class="p_12 am-text-right">-->
-<!--				<a href="{:url('Users/refund',array('did'=>$v['did']))}" class="order_cancle am-btn am-btn-xs am-round am-btn-default">退款</a>-->
-<!--			</div>-->
+			<div class="p_12 am-text-right">
+				<a href="{:url('Users/dd_detail',array('did'=>$v['did']))}" class="order_cancle am-btn am-btn-xs am-round am-btn-default">订单详情</a>
+			</div>
 		</li>
 		{/volist}
 	</ul>

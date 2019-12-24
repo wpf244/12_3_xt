@@ -152,7 +152,7 @@
                 <tr>
                   <td><div align="right"><strong>运费：</strong></div></td>
                   <td colspan="5"><input type="number" min="0" placeholder="请输入运费" {if condition="$re.fare neq 0"} value="{$re.fare}" {/if} name="fare"  style="color:#00F" class="submitinput">
-                    <input id="to_fare" type="submit" style="color:#3e17ff" value="确定" class="button" /> </td>
+                   {if condition="$re.fare eq 0"} <input id="to_fare" type="submit" style="color:#3e17ff" value="确定" class="button" />{/if} </td>
 
                 </tr>
                 <tr>
@@ -276,7 +276,7 @@
 
     $.ajax({
       type:"post",
-      url:"{:url('Dd/fare')}",
+      url:"{:url('Dd/fares')}",
       datatype:"text",
       data:{did:did,fare:fare},
       success:function (re) {
@@ -284,14 +284,21 @@
           layer.alert("操作成功");
 
           $("#express").val(fare);
-        }else{
-          layer.alert("系统繁忙，请稍后再试", {icon: 5}, function(index) {
+        }else if(re == 3) {
+          layer.alert("此运费订单已支付，不能修改", {icon: 5}, function(index) {
             layer.close(index);
 
             location.reload();
           })
+        }else{
+            layer.alert("系统繁忙，请稍后再试", {icon: 5}, function(index) {
+              layer.close(index);
+
+              location.reload();
+            })
+          }
         }
-      }
+
     })
 
   })

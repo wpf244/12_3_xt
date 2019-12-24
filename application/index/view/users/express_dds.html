@@ -21,8 +21,8 @@
 	</div>
 
 	<div class="order_menu">
-			<a href="{:url('Users/express_dd')}" class="order_single active">待支付</a>
-			<a href="{:url('Users/express_dds')}" class="order_single">已支付</a>
+			<a href="{:url('Users/express_dd')}" class="order_single ">待支付</a>
+			<a href="{:url('Users/express_dds')}" class="order_single active">已支付</a>
 
 		</div>
 
@@ -39,7 +39,7 @@
 			</div>
 			<div class="p_12 am-text-right">
 					<a href="{:url('Users/dd_detail',array('did'=>$v['did']))}" class="order_cancle am-btn am-btn-xs am-round am-btn-default">订单详情</a>
-					<a href="{:url('Pay/express_dd',array('id'=>$v['id']))}" class="order_pay am-btn am-btn-xs am-round am-btn-danger">去支付</a>
+
 				</div>
 		</li>
 		{/volist}

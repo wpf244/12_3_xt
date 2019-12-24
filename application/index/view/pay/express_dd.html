@@ -21,8 +21,8 @@
 	<div class="ticket_tai bd_btm am-text-center am-text-lg font_bold">收银台</div>
 
 	<div class="flex_between p_12 bd_btm am-text-center">
-		<span>{$re.gname}</span>
-		<span class="col_main am-text-lg font_bold">￥{$re.zprice}</span>
+		<span>运费</span>
+		<span class="col_main am-text-lg font_bold">￥{$re.fare}</span>
 	</div>
 
 	<a href="javascript:;" class="flex_between p_12 bd_btm">
@@ -42,11 +42,11 @@
 
 <script>
 	function pay() {
-		var goods_money=parseFloat("{$re.zprice}");
+		var goods_money=parseFloat("{$re.fare}");
 
 		var user_money=parseFloat("{$user.money}");
 
-		var did = "{$re.did}";
+		var id = "{$re.id}";
 
 		if(goods_money > user_money){
 			layer.msg("账户余额不足，请联系客服充值");return false;
@@ -54,9 +54,9 @@
 
 		$.ajax({
 			type:"post",
-			url:"{:url('Pay/settlement')}",
+			url:"{:url('Pay/pay_express')}",
 			datatype:"text",
-			data:{did:did},
+			data:{id:id},
 			success:function (re) {
 				if(re == 0){
 					layer.msg("支付失败，账号余额不足，请联系客服充值");

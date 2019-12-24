@@ -209,6 +209,12 @@ class Shop extends BaseUser
     {
         $uid=session("userid");
 
+        $express=db("express_dd")->where(["uid"=>$uid,"status"=>0])->find();
+
+        if($express){
+            echo '-1';exit();
+        }
+
         $user=db("user")->where("uid",$uid)->find();
 
         $aid=input("aid");
@@ -250,6 +256,8 @@ class Shop extends BaseUser
             $price=$good['xprice'];
 
             $arr['gcode']=$good['code'];
+            $arr['gtype']=$good['type'];
+            $arr['gspecs']=$good['specs'];
             $arr['simage']=$v['s_image'];
             $arr['price']=$price;
             $arr['zprice']=$price*$v['num'];

@@ -63,6 +63,7 @@
 			</div>
 			<div class="p_12 am-text-right">
 				<a onclick="dels({$v.did})" class="order_cancle am-btn am-btn-xs am-round am-btn-default">取消订单</a>
+				<a href="{:url('Users/dd_detail',array('did'=>$v['did']))}" class="order_cancle am-btn am-btn-xs am-round am-btn-default">订单详情</a>
 				<a href="{:url('Pay/pay_dd')}?did={$v['did']}" class="order_pay am-btn am-btn-xs am-round am-btn-danger">去付款</a>
 
 			</div>

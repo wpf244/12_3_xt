@@ -15,37 +15,59 @@
 					 <a href="{:url('Users/indexs')}">个人中心</a>&nbsp;&gt;
 					</li>
 					<li>
-					<a href="javascript:;">运费订单</a>
+					<a href="javascript:;">余额明细</a>
 					</li>
 				   </ul>
 	</div>
 
 	<div class="order_menu">
-			<a href="{:url('Users/express_dd')}" class="order_single active">待支付</a>
-			<a href="{:url('Users/express_dds')}" class="order_single">已支付</a>
+			<a href="{:url('Users/money_detail')}" class="order_single active">充值明细</a>
+			<a href="{:url('Users/money_details')}" class="order_single">消费明细</a>
 
 		</div>
 
+	<style>
+		.money th {
+			text-align: center;
+		}
+		.money td{
+			text-align: center;
+			width: 25%;
+		}
+		.money{
+			height: 50px;
+		}
+		</style>
+
 	<ul class="order_list">
-	  {volist name="res" id="v"}	
-		<li class="order_danyuan bd_btm_10">
-			<div class="flex_between p_12">
-				<h6>订单号：{$v.code}</h6><span class="col_main ">订单金额：{$v.zprice}</span>
-			</div>
+	  <table style="width: 100%;">
+		  <thead>
+		  <tr class="money">
 
-			<div class="p_12 bd_btm am-text-right">
+			  <th>金额</th>
+			  <th>类型</th>
+			  <th>备注</th>
+			  <th>时间</th>
 
-				运费：<span class="col_main am-text-lg">￥{$v.fare}</span>
-			</div>
-			<div class="p_12 am-text-right">
-					<a href="{:url('Users/dd_detail',array('did'=>$v['did']))}" class="order_cancle am-btn am-btn-xs am-round am-btn-default">订单详情</a>
-					<a href="{:url('Pay/express_dd',array('id'=>$v['id']))}" class="order_pay am-btn am-btn-xs am-round am-btn-danger">去支付</a>
-				</div>
-		</li>
+		  </tr>
+		  </thead>
+
+		  <tbody>
+            {volist name="res" id="v"}
+         <tr class="money">
+		  <td>{$v.money}</td>
+		  <td>{if condition="$v.type eq 1"} <span style="color: #00BE67;">增加</span> {else /} <span style="color: red;">减少</span> {/if}</td>
+		  <td>{$v.content}</td>
+		  <td>{$v.time|date="Y-m-d H:i:s",###}</td>
+
+		 </tr>
 		{/volist}
+		  </tbody>
+
+	  </table>
 	</ul>
 
-	<div class="no_data">暂无更多订单~</div>
+	<div class="no_data">暂无更多信息~</div>
 
 
 
