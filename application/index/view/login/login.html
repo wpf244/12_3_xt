@@ -72,20 +72,24 @@
 
             function complete(data) {
                 if (data.code == 1) {
-                    layer.alert(data.msg, {
-                        icon: 6
-                    }, function (index) {
-                        layer.close(index);
-                        window.location.href = data.url;
-                    });
+                    // layer.alert(data.msg, {
+                    //     icon: 6
+                    // }, function (index) {
+                    //     layer.close(index);
+						window.location.href = data.url;
+				
+                    // });
 
                 } else {
-                    layer.alert(data.msg, {
-                        icon: 5
-                    }, function (index) {
-                        layer.close(index);
-                        return false;
-                    });
+                    // layer.alert(data.msg, {
+                    //     icon: 5
+                    // }, function (index) {
+                    //     layer.close(index);
+                    //     return false;
+					// });
+					layer.msg(data.msg);
+
+					return false;
 
                 }
             }

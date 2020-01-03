@@ -214,10 +214,12 @@
 					success:function(re){
                            if(re == 0){
 							   layer.msg("修改成功");
-							   window.location.href=document.referrer;
+							//    window.location.href=document.referrer;
+							   setTimeout("window.location.href=document.referrer",2000);
 						   }else{
 							   layer.msg("修改失败");
-							   window.location.href=document.referrer;
+							//    window.location.href=document.referrer;
+							   setTimeout("window.location.href=document.referrer",2000);
 						   }
 					}
 				})

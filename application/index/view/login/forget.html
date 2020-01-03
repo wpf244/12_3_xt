@@ -68,20 +68,26 @@
 	
 				function complete(data) {
 					if (data.code == 1) {
-						layer.alert(data.msg, {
-							icon: 6
-						}, function (index) {
-							layer.close(index);
-							window.location.href = data.url;
-						});
+						// layer.alert(data.msg, {
+						// 	icon: 6
+						// }, function (index) {
+						// 	layer.close(index);
+						// 	window.location.href = data.url;
+						// });
+
+						layer.msg(data.msg);
+
+						setTimeout("location.href="+'"'+data.url+'"',2000);
+
 	
 					} else {
-						layer.alert(data.msg, {
-							icon: 5
-						}, function (index) {
-							layer.close(index);
-							window.location.href = data.url;
-						});
+						// layer.alert(data.msg, {
+						// 	icon: 5
+						// }, function (index) {
+						// 	layer.close(index);
+						// 	window.location.href = data.url;
+						// });
+						layer.msg(data.msg);return false;
 	
 					}
 				}

@@ -145,7 +145,7 @@ class Login extends BaseHome
                          $this->success("修改成功",url('Login/Login')); 
                     }else{
 
-                        $this->error("系统繁忙,请稍后再试",url('Login/login'));
+                        $this->error("新密码与原密码相同",url('Login/login'));
 
                     }
                     
