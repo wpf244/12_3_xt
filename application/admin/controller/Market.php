@@ -282,6 +282,174 @@ class Market extends BaseAdmin
         
         return $this->fetch();
     }
+    /**
+     * 商品销售
+     */
+    public function goods()
+    {
+        $sort=input("sort");
+
+        if($sort){
+
+            if($sort ==1){
+
+                $order="sales desc";
+
+            }else{
+
+                $order="sales asc";
+
+            }
+
+        }else{
+            $order="sales desc";
+
+            $sort=2;
+        }
+
+        $this->assign("sort",$sort);
+
+        $pagesize=input("pagesize");
+
+        if(!$pagesize){
+
+            $pagesize=10;
+
+        }
+        $this->assign("pagesize",$pagesize);
+
+        $pagenum=input("page");
+
+        if(!$pagenum){
+            $pagenum=0;
+        }
+        $this->assign("pagenum",$pagenum);
+
+        $list=db("goods")->order("$order")->paginate($pagesize,false,['query'=>request()->param()]);
+
+        $this->assign("list",$list);
+
+        $page=$list->render();
+
+        $this->assign("page",$page);
+        
+        return $this->fetch();
+    }
+    /**
+     * 导出数据
+     */
+    public function outg()
+    {
+        $sort=input("sort");
+
+        if($sort){
+
+            if($sort ==1){
+
+                $order="sales desc";
+
+            }else{
+
+                $order="sales asc";
+
+            }
+
+        }else{
+            $order="sales desc";
+
+            $sort=2;
+        }
+
+        $pagesize=input("pagesize");
+
+        if(!$pagesize){
+
+            $pagesize=10;
+
+        }
+
+        $pagenum=input("pagenum");
+
+        if(!$pagenum){
+            $pagenum=1;
+        }
+
+        $num=($pagenum-1)*$pagesize;
+     
+        $list=db("goods")->order("$order")->limit($num,$pagesize)->select();
+
+        // var_dump($num,$pagesize);exit;
+        vendor('PHPExcel.PHPExcel');//调用类库,路径是基于vendor文件夹的
+        vendor('PHPExcel.PHPExcel.Worksheet.Drawing');
+        vendor('PHPExcel.PHPExcel.Writer.Excel2007');
+        $objExcel = new \PHPExcel();
+        //set document Property
+        $objWriter = \PHPExcel_IOFactory::createWriter($objExcel, 'Excel2007');
+    
+        $objActSheet = $objExcel->getActiveSheet();
+        $key = ord("A");
+        $letter =explode(',',"A,B,C,D,E,F,G");
+        $arrHeader =  array("供货渠道","商品名称","商品价格","商品代码","商品规格","商品销量","商品库存");
+        //填充表头信息
+        $lenth =  count($arrHeader);
+        for($i = 0;$i < $lenth;$i++) {
+            $objActSheet->setCellValue("$letter[$i]1","$arrHeader[$i]");
+        }
+        //填充表格信息
+        foreach($list as $k=>$v){
+            $k +=2;
+            if($v['canal'] == 1){
+                $type="代理商";
+            }else{
+                $type="客服";
+            }
+           
+            $objActSheet->setCellValue('A'.$k,$type);
+            $objActSheet->setCellValue('B'.$k,$v['name']);
+            $objActSheet->setCellValue('C'.$k,$v['xprice']);
+            $objActSheet->setCellValue('D'.$k, $v['code']);
+            // 表格内容
+            $objActSheet->setCellValue('E'.$k, $v['type']);
+            $objActSheet->setCellValue('F'.$k, $v['sales']);
+            $objActSheet->setCellValue('G'.$k, $v['kc']);
+           
+
+            // 表格高度
+            $objActSheet->getRowDimension($k)->setRowHeight(20);
+        }
+    
+        $width = array(20,20,15,10,10,30,10,15,15,15);
+        //设置表格的宽度
+        $objActSheet->getColumnDimension('A')->setWidth(20);
+        $objActSheet->getColumnDimension('B')->setWidth(30);
+        $objActSheet->getColumnDimension('C')->setWidth(10);
+        $objActSheet->getColumnDimension('D')->setWidth(20);
+        $objActSheet->getColumnDimension('E')->setWidth(20);
+        $objActSheet->getColumnDimension('F')->setWidth(20);
+        $objActSheet->getColumnDimension('G')->setWidth(10);
+       
+        
+        $outfile = "商品销量".".xlsx";
+    
+        $userBrowser=$_SERVER['HTTP_USER_AGENT'];
+        
+        if(preg_match('/MSIE/i', $userBrowser)){
+            $outfile=urlencode($outfile);
+           
+        }else{
+            $outfile= iconv("utf-8","gb2312",$outfile);;
+            
+        }
+        ob_end_clean();
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header('Content-Disposition:inline;filename="'.$outfile.'"');
+        header("Content-Transfer-Encoding: binary");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Pragma: no-cache");
+        $objWriter->save('php://output');
+    }
 
 
 }
