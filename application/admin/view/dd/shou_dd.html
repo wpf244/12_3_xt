@@ -185,6 +185,7 @@
 	
 	 var addr="{$addr}";
    var type="{$type}";
+   var pagenum = "{$pagenum}";
 	 if(start == ''){
 		 start=0;
 	 }
@@ -199,7 +200,7 @@
 	 if(addr == ''){
 		 addr = 0;
 	 }
-	 location.href="__URL__/outh/start/"+start+"/end/"+end+"/code/"+code+"/addr/"+addr+"/type/"+type;
+	 location.href="__URL__/outh/start/"+start+"/end/"+end+"/code/"+code+"/addr/"+addr+"/type/"+type+"/pagenum/"+pagenum;
  })
 </script>
 <script type="text/javascript">

@@ -60,6 +60,13 @@ class Dd extends BaseAdmin
         $this->assign("code",$code);
 
         $this->assign("type",$type);
+
+        $pagenum=input("page");
+
+        if(!$pagenum){
+            $pagenum=0;
+        }
+        $this->assign("pagenum",$pagenum);
         
         $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=1 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->paginate(20,false,['query'=>request()->param()]);
         $this->assign("list",$list);
@@ -111,7 +118,15 @@ class Dd extends BaseAdmin
 
         }
 
-        $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=1 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->select();
+        $pagenum=input("pagenum");
+
+        if(!$pagenum){
+            $pagenum=1;
+        }
+
+        $num=($pagenum-1)*20;
+
+        $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=1 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->limit($num,20)->select();
         // var_dump($data);exit;
         vendor('PHPExcel.PHPExcel');//调用类库,路径是基于vendor文件夹的
         vendor('PHPExcel.PHPExcel.Worksheet.Drawing');
@@ -389,6 +404,13 @@ class Dd extends BaseAdmin
 
         $this->assign("type",$type);
 
+        $pagenum=input("page");
+
+        if(!$pagenum){
+            $pagenum=0;
+        }
+        $this->assign("pagenum",$pagenum);
+
         $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=2 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->paginate(20,false,['query'=>request()->param()]);
         $this->assign("list",$list);
         $page=$list->render();
@@ -441,7 +463,15 @@ class Dd extends BaseAdmin
 
         }
 
-        $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=2 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->select();
+        $pagenum=input("pagenum");
+
+        if(!$pagenum){
+            $pagenum=1;
+        }
+
+        $num=($pagenum-1)*20;
+
+        $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=2 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->limit($num,20)->select();
 //         var_dump($list);exit;
         vendor('PHPExcel.PHPExcel');//调用类库,路径是基于vendor文件夹的
         vendor('PHPExcel.PHPExcel.Worksheet.Drawing');
@@ -592,6 +622,13 @@ class Dd extends BaseAdmin
         $this->assign("code",$code);
 
         $this->assign("type",$type);
+
+        $pagenum=input("page");
+
+        if(!$pagenum){
+            $pagenum=0;
+        }
+        $this->assign("pagenum",$pagenum);
         
         $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=3 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->paginate(20,false,['query'=>request()->param()]);
         $this->assign("list",$list);
@@ -645,8 +682,15 @@ class Dd extends BaseAdmin
             $type=0;
 
         }
+        $pagenum=input("pagenum");
+
+        if(!$pagenum){
+            $pagenum=1;
+        }
+
+        $num=($pagenum-1)*20;
     
-        $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=3 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->select();
+        $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=3 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->limit($num,20)->select();
         // var_dump($data);exit;
         vendor('PHPExcel.PHPExcel');//调用类库,路径是基于vendor文件夹的
         vendor('PHPExcel.PHPExcel.Worksheet.Drawing');
@@ -968,6 +1012,13 @@ class Dd extends BaseAdmin
         $this->assign("code",$code);
 
         $this->assign("type",$type);
+
+        $pagenum=input("page");
+
+        if(!$pagenum){
+            $pagenum=0;
+        }
+        $this->assign("pagenum",$pagenum);
     
         $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=4 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->paginate(20,false,['query'=>request()->param()]);
         $this->assign("list",$list);
@@ -1017,8 +1068,16 @@ class Dd extends BaseAdmin
             $type=0;
 
         }
+
+        $pagenum=input("pagenum");
+
+        if(!$pagenum){
+            $pagenum=1;
+        }
+
+        $num=($pagenum-1)*20;
     
-        $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=4 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->select();
+        $list=db("car_dd")->alias('a')->field("a.*,c.nickname")->where("a.status=4 and gid=0")->where($map)->join("user c","a.uid = c.uid",'left')->order("did desc")->limit($num,20)->select();
         // var_dump($data);exit;
         vendor('PHPExcel.PHPExcel');//调用类库,路径是基于vendor文件夹的
         vendor('PHPExcel.PHPExcel.Worksheet.Drawing');
