@@ -2886,13 +2886,13 @@ border: 1px solid #2864c8;
     background: url("../img/spider_search_v4.png") -30px -764px no-repeat;
 }
 .result-info .status-first {
-    background: url("../img/spider_search_v4.png") 13px -804px no-repeat;
+    background: url("../img/spider_search_v4.png") 13px -800px no-repeat;
 }
 .result-info .status-check {
     background: url("../img/spider_search_v4.png") 10px -717px no-repeat;
 }
 .result-info .status-wait {
-    background: url("../img/spider_search_v4.png") -30px -802px no-repeat;
+    background: url("../img/spider_search_v4.png") -30px -800px no-repeat;
 }
 .status .col2 {
     position: relative;
