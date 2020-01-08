@@ -311,9 +311,7 @@ class Dd extends BaseAdmin
             $data['fu_time']=time();
             $data['status']=2;
 
-
             $pay=explode(",",$re['pay']);
-
 
             // 启动事务
             Db::startTrans();
@@ -335,10 +333,7 @@ class Dd extends BaseAdmin
 
                     db("goods")->where("id=$gid")->setDec("kc",$num);
 
-
-
                 }
-
 
                 // 提交事务
                 Db::commit();
@@ -346,9 +341,6 @@ class Dd extends BaseAdmin
                 // 回滚事务
                 Db::rollback();
             }
-
-
-//            var_dump($res);exit();
              
             $this->redirect("dai_dd");
         }else{
